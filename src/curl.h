@@ -25,7 +25,8 @@
 //----------------------------------------------
 // Symbols
 //----------------------------------------------
-#define MIN_MULTIPART_SIZE          5242880           // 5MB
+// #define MIN_MULTIPART_SIZE          5242880           // 5MB
+#define MIN_MULTIPART_SIZE             32768             // 32k
 
 //----------------------------------------------
 // class BodyData
@@ -236,6 +237,7 @@ class S3fsCurl
     static mimes_t          mimeTypes;
     static int              max_parallel_cnt;
     static off_t            multipart_size;
+    static off_t            multipart_size_unit;
     static bool             is_sigv4;
     static const std::string skUserAgent;
 
@@ -366,6 +368,8 @@ class S3fsCurl
     static const char* GetRAMRole(void) { return S3fsCurl::RAM_role.c_str(); }
     static bool SetMultipartSize(off_t size);
     static off_t GetMultipartSize(void) { return S3fsCurl::multipart_size; }
+    static bool SetMultipartSizeUnit(off_t size);
+    static off_t GetMultipartSizeUnit(void) { return S3fsCurl::multipart_size_unit; }
     static bool SetSignatureV4(bool isset) { bool bresult = S3fsCurl::is_sigv4; S3fsCurl::is_sigv4 = isset; return bresult; }
     static bool IsSignatureV4(void) { return S3fsCurl::is_sigv4; }
 

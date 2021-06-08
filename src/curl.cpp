@@ -273,6 +273,7 @@ void CurlHandlerPool::ReturnHandler(CURL* h)
 // Class S3fsCurl
 //-------------------------------------------------------------------
 #define MULTIPART_SIZE              10485760          // 10MB
+#define MULTIPART_SIZE_UNIT         1048576           // 1MB
 #define MAX_MULTI_COPY_SOURCE_SIZE  524288000         // 500MB
 
 #define	RAM_EXPIRE_MERGIN           (20 * 60)         // update timming
@@ -322,6 +323,7 @@ string           S3fsCurl::curl_ca_bundle;
 mimes_t          S3fsCurl::mimeTypes;
 int              S3fsCurl::max_parallel_cnt    = 5;              // default
 off_t            S3fsCurl::multipart_size      = MULTIPART_SIZE; // default
+off_t            S3fsCurl::multipart_size_unit = MULTIPART_SIZE_UNIT; // default
 bool             S3fsCurl::is_sigv4            = true;           // default
 const string     S3fsCurl::skUserAgent = "aliyun-sdk-http/1.0()/ossfs" + string(VERSION);
 
@@ -1085,11 +1087,17 @@ string S3fsCurl::SetRAMRole(const char* role)
 
 bool S3fsCurl::SetMultipartSize(off_t size)
 {
-  size = size * 1024 * 1024;
+  size = size * S3fsCurl::multipart_size_unit;
   if(size < MIN_MULTIPART_SIZE){
     return false;
   }
   S3fsCurl::multipart_size = size;
+  return true;
+}
+
+bool S3fsCurl::SetMultipartSizeUnit(off_t size)
+{
+  S3fsCurl::multipart_size_unit = size;
   return true;
 }
 

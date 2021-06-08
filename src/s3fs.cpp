@@ -4477,6 +4477,11 @@ static int my_fuse_opt_proc(void* data, const char* arg, int key, struct fuse_ar
       S3FS_PRN_ERR("option fd_page_size is no longer supported, so skip this option.");
       return 0;
     }
+    if(0 == STR2NCMP(arg, "multipart_size_unit=")){
+      off_t size = static_cast<off_t>(s3fs_strtoofft(strchr(arg, '=') + sizeof(char)));
+      S3fsCurl::SetMultipartSizeUnit(size);
+      return 0;
+    }
     if(0 == STR2NCMP(arg, "multipart_size=")){
       off_t size = static_cast<off_t>(s3fs_strtoofft(strchr(arg, '=') + sizeof(char)));
       if(!S3fsCurl::SetMultipartSize(size)){
